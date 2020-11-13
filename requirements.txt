@@ -2,4 +2,4 @@ pytest==5.4.3
 flask==1.1.2
 gunicorn==19.9.0
 flask_cors
-postcodes-uk>=1.0.1
+postcodes-uk==1.0.1

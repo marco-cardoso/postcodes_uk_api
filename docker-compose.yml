@@ -1,0 +1,27 @@
+version: '3'
+services:
+  flask:
+    build:
+      context: .
+      dockerfile: './docker/Dockerfile.flask'
+    container_name: 'flask_api_container'
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/opt/services/postcodes_uk_api
+    networks:
+      - web_nw
+  nginx:
+    image: "nginx:1.13.5"
+    container_name: 'nginx_api_container'
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - web_nw
+    depends_on:
+      - flask
+networks:
+  web_nw:
+    driver: bridge

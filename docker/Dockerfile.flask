@@ -1,0 +1,26 @@
+FROM python:3.8
+MAINTAINER Marco Cardoso
+
+# Create the user to run the app
+RUN adduser --disabled-password --gecos '' app-user
+
+# Install postcodes_uk_api dependencies
+RUN mkdir -p /opt/services/postcodes_uk_api
+
+COPY . /opt/services/postcodes_uk_api
+WORKDIR /opt/services/postcodes_uk_api
+RUN python setup.py install
+
+# Install the webapp dependencies
+WORKDIR /opt/services/postcodes_uk_api
+RUN pip install -r requirements.txt
+
+# Change run.sh permissions
+RUN chmod +x /opt/services/postcodes_uk_api/run.sh
+
+RUN chown -R app-user:app-user ./
+
+# Expose port and running cmd as app-user
+USER app-user
+EXPOSE 5000
+CMD ["/bin/sh", "run.sh"]
